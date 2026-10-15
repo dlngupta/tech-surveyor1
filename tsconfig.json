@@ -1,0 +1,4 @@
+{ "compileOnSave": false,
+  "compilerOptions": { "outDir": "./dist/out-tsc", "strict": false, "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true, "skipLibCheck": true, "moduleResolution": "bundler",
+    "target": "ES2022", "module": "ES2022", "lib": ["ES2022", "dom"], "experimentalDecorators": true } }
