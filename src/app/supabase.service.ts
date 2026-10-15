@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
 import imageCompression from 'browser-image-compression';
 import { compressPdf } from './pdf-compress';
 
@@ -50,6 +50,48 @@ export class SupabaseService {
 
   constructor() {
     this.supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+
+  async getSession(): Promise<Session | null> {
+    const { data, error } = await this.supabase.auth.getSession();
+    if (error) throw error;
+    return data.session;
+  }
+
+  async signIn(email: string, password: string): Promise<void> {
+    const { error } = await this.supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  }
+
+  async signUp(email: string, password: string): Promise<boolean> {
+    const { data, error } = await this.supabase.auth.signUp({ email, password });
+    if (error) throw error;
+    return !data.session;
+  }
+
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await this.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) throw error;
+  }
+
+  async sendPasswordReset(email: string): Promise<void> {
+    const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
+  }
+
+  async updatePassword(password: string): Promise<void> {
+    const { error } = await this.supabase.auth.updateUser({ password });
+    if (error) throw error;
+  }
+
+  async signOut(): Promise<void> {
+    const { error } = await this.supabase.auth.signOut();
+    if (error) throw error;
   }
 
   async listFiles(): Promise<StoredDoc[]> {

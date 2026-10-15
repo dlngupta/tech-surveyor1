@@ -6,10 +6,16 @@ export interface Portal { name: string; url: string; cat: string; desc: string; 
 // Add more portals here (name, url, category, description).
 export const PORTALS: Portal[] = [
   { name: 'Webland', url: 'https://webland.ap.gov.in/', cat: 'Land administration', desc: 'AP land records and administration' },
+  { name: 'Webland 2.0 POLR6', url: 'https://webland2.ap.gov.in/POLR6/loginpage.aspx', cat: 'Land administration', desc: 'Ground Truthing, land register and ROR progress' },
   { name: 'MeeBhoomi', url: 'https://meebhoomi.ap.gov.in/', cat: 'Land services', desc: 'Adangal, 1-B and land record extracts' },
   { name: 'BhuNaksha', url: 'https://bhunaksha.ap.gov.in/', cat: 'Cadastral maps', desc: 'Village cadastral / survey maps' },
+  { name: 'Bhuvan', url: 'https://bhuvan.nrsc.gov.in/', cat: 'Maps & imagery', desc: 'ISRO geoportal and thematic maps' },
   { name: 'AP Meeseva', url: 'https://ap.meeseva.gov.in/', cat: 'Citizen & Revenue services', desc: 'Citizen and revenue services' },
+  { name: 'APSeva', url: 'https://apseva.ap.gov.in/', cat: 'Citizen services', desc: 'Andhra Pradesh government services' },
+  { name: 'PGRS', url: 'https://pgrs.ap.gov.in/', cat: 'Citizen services', desc: 'Public Grievance Redressal System' },
   { name: 'IGRS', url: 'https://registration.ap.gov.in/igrs', cat: 'Registration', desc: 'Registration and stamps (AP IGRS)' },
+  { name: 'Beneficiary Management', url: 'https://bm-sgsw.ap.gov.in/BM/', cat: 'Government services', desc: 'Andhra Pradesh beneficiary management portal' },
+  { name: 'ECINET', url: 'https://ecinet.eci.gov.in/login', cat: 'Government services', desc: 'Election Commission of India portal for authorized users' },
 ];
 
 @Component({

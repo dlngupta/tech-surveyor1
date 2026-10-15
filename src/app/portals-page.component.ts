@@ -12,11 +12,17 @@ interface Portal {
 
 const PORTALS: Portal[] = [
   { name: 'MeeSeva', abbr: 'MS', url: 'https://ap.meeseva.gov.in/', desc: 'Citizen & Revenue services', color: '#2e7d32' },
+  { name: 'APSeva', abbr: 'AS', url: 'https://apseva.ap.gov.in/', desc: 'Andhra Pradesh government services', color: '#00838f' },
+  { name: 'PGRS', abbr: 'PG', url: 'https://pgrs.ap.gov.in/', desc: 'Public Grievance Redressal System', color: '#ad1457' },
   { name: 'Webland', abbr: 'WL', url: 'https://webland.ap.gov.in/', desc: 'Land administration', color: '#1565c0' },
   { name: 'Webland 2.0', abbr: 'W2', url: 'https://webland2.ap.gov.in/', desc: 'Land services', color: '#00796b' },
+  { name: 'Webland 2.0 POLR6', abbr: 'P6', url: 'https://webland2.ap.gov.in/POLR6/loginpage.aspx', desc: 'Ground Truthing, land register and ROR progress', color: '#00695c' },
   { name: 'MeeBhoomi', abbr: 'MB', url: 'https://meebhoomi.ap.gov.in/', desc: 'AP land records', color: '#e65100' },
   { name: 'BhuNaksha', abbr: 'BN', url: 'https://bhunaksha.ap.gov.in/', desc: 'Cadastral maps', color: '#6a1b9a' },
+  { name: 'Bhuvan', abbr: 'BV', url: 'https://bhuvan.nrsc.gov.in/', desc: 'ISRO geoportal and thematic maps', color: '#1954a0' },
   { name: 'IGRS', abbr: 'IG', url: 'https://registration.ap.gov.in/igrs', desc: 'Registration services', color: '#c62828' },
+  { name: 'Beneficiary Management', abbr: 'BM', url: 'https://bm-sgsw.ap.gov.in/BM/', desc: 'Andhra Pradesh beneficiary management portal', color: '#5d4037' },
+  { name: 'ECINET', abbr: 'EC', url: 'https://ecinet.eci.gov.in/login', desc: 'Election Commission of India portal for authorized users', color: '#455a64' },
 ];
 
 @Component({
@@ -39,10 +45,6 @@ const PORTALS: Portal[] = [
               <div class="badge" [style.background]="'linear-gradient(135deg, ' + p.color + ', ' + p.color + 'cc)'">{{ p.abbr }}</div>
               <b>{{ p.name }}</b>
               <span class="desc">{{ p.desc }}</span>
-              <span class="open" [style.color]="p.color">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                Open in app
-              </span>
             </a>
           }
         </div>
@@ -110,10 +112,6 @@ const PORTALS: Portal[] = [
     }
     .card b { font-size: 16px; color: #1a3a4a; font-weight: 700; }
     .desc { font-size: 13px; color: #888; line-height: 1.3; }
-    .open {
-      font-size: 13px; font-weight: 600;
-      display: inline-flex; align-items: center; gap: 4px;
-    }
     .empty-msg { text-align: center; color: #999; padding: 20px; }
   `],
 })
