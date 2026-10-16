@@ -30,6 +30,7 @@ interface Lyr { id: string; name: string; fc: any; color: string; opacity: numbe
     <div class="map-wrap">
       <div id="map"></div>
       <button class="base-chip" (click)="cycleBase()">Map: {{ baseLabel() }}</button>
+      @if (msg()) { <p class="map-message" role="status">{{ msg() }}</p> }
     </div>
 
     <div class="bottom-bar">
@@ -120,6 +121,12 @@ interface Lyr { id: string; name: string; fc: any; color: string; opacity: numbe
       background: #fff; border: 1px solid #ccc; border-radius: 20px;
       padding: 6px 14px; font-size: 13px; cursor: pointer;
       box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    .map-message {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      max-width: min(70%, 420px); margin: 0; padding: 8px 12px;
+      border-radius: 10px; background: #fff; color: #284e63;
+      font-size: 13px; box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     }
     .bottom-bar {
       display: flex;
@@ -241,13 +248,36 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       let text: string;
       if (f.name.toLowerCase().endsWith('.kmz')) {
         const zip = await JSZip.loadAsync(f);
-        const entry = Object.values(zip.files).find(z => z.name.toLowerCase().endsWith('.kml'));
-        text = await entry!.async('string');
+        const entry = Object.values(zip.files).find(z => !z.dir && z.name.toLowerCase().endsWith('.kml'));
+        if (!entry) throw new Error('This KMZ archive does not contain a KML file.');
+        text = await entry.async('string');
       } else text = await f.text();
-      const fc = kml(new DOMParser().parseFromString(text, 'text/xml'));
+      const fc = kml(this.parseKml(text));
+      if (!fc.features.length) throw new Error('No map features were found in this KML file.');
       this.addLayer(f.name, fc);
-    } catch (e) { this.msg.set('Could not open KML/KMZ: ' + e); }
+    } catch (e) {
+      this.msg.set('Could not open KML/KMZ: ' + (e instanceof Error ? e.message : String(e)));
+    }
     (ev.target as HTMLInputElement).value = '';
+  }
+
+  private parseKml(text: string): Document {
+    const parser = new DOMParser();
+    let document = parser.parseFromString(text, 'text/xml');
+    if (document.getElementsByTagName('parsererror').length) {
+      const root = /<((?:[\w.-]+:)?kml)\b([^>]*)>/i;
+      const rootTag = text.match(root)?.[0] ?? '';
+      if (/\bxsi:/i.test(text) && rootTag && !/\bxmlns:xsi\s*=/i.test(rootTag)) {
+        text = text.replace(root, (_match, name: string, attributes: string) =>
+          `<${name}${attributes} xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">`);
+        document = parser.parseFromString(text, 'text/xml');
+      }
+    }
+    const parseError = document.getElementsByTagName('parsererror')[0];
+    if (parseError) {
+      throw new Error(`Invalid KML XML: ${parseError.textContent?.trim() || 'could not parse the document.'}`);
+    }
+    return document;
   }
 
   addLayer(name: string, fc: any) {
